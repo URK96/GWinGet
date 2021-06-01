@@ -13,52 +13,34 @@ using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace GWinGet.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class InstallPage : Page
     {
-        public bool WorkActive { get; set; }
-        public ICollection Items { get; set; }
-
         public InstallPage()
         {
             this.InitializeComponent();
-
-            SearchPackages();
-
-            var task = new Task(SearchPackages);
-
-            task.Start();
         }
 
-        private void SearchPackages()
+        private async void RefreshPackages()
         {
-            WorkActive = true;
+            using var ps = PowerShell.Create();
 
-            using (var ps = PowerShell.Create())
-            {
-                ps.AddCommand("winget");
-                ps.AddArgument("search");
+            ps.AddCommand("winget");
+            ps.AddArgument("search");
 
-                var list = ps.Invoke();
+            await ps.InvokeAsync();
+        }
 
-                var item = list[0];
-
-                LV.ItemsSource = list;
-            }
-
-            WorkActive = false;
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshPackages();
         }
     }
 }

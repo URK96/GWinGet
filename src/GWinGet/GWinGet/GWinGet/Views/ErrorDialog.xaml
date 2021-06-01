@@ -1,0 +1,14 @@
+﻿<ContentDialog
+        x:Class="GWinGet.Views.ErrorDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+        Title="Error"
+        CloseButtonText="Close"
+        DefaultButton="Close">
+
+    <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <TextBlock x:Name="MessageBlock" />
+    </StackPanel>
+
+</ContentDialog>

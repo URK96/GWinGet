@@ -9,17 +9,12 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <ProgressRing x:Name="WorkRing" Width="50" Height="50"
-                      IsActive="{Binding WorkActive}" />
+    <StackPanel>
+        <CommandBar IsOpen="False" HorizontalAlignment="Stretch" Background="Transparent">
+            <AppBarButton Icon="Refresh" Label="Refresh List" Click="AppBarButton_Click" />
+        </CommandBar>
 
-        <Grid>
-            <ListView x:Name="LV" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                      ItemsSource="{Binding Items}">
+        <ListView x:Name="LV"/>
+    </StackPanel>
 
-            </ListView>
-        </Grid>
-    </Grid>
-    
-    
 </Page>

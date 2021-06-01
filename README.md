@@ -1,2 +1,2 @@
 # GWinGet
-GUI UWP Application for Windows Package Manager Client
+GUI Application for Windows Package Manager Client
