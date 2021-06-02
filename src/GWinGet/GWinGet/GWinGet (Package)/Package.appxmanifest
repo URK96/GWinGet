@@ -7,13 +7,13 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="a8b61997-ac44-4b6e-a57e-9d7974f67b96"
-    Publisher="CN=chlwl"
-    Version="1.0.0.0" />
+    Name="51675URK96.GWinGet"
+    Publisher="CN=558FBEBE-C1DE-4502-AFA1-2ACF1A20C1EE"
+    Version="0.0.1.0" />
 
   <Properties>
-    <DisplayName>GWinGet (Package)</DisplayName>
-    <PublisherDisplayName>chlwl</PublisherDisplayName>
+    <DisplayName>GWinGet</DisplayName>
+    <PublisherDisplayName>URK96</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
@@ -31,12 +31,12 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="GWinGet (Package)"
-        Description="GWinGet (Package)"
+        DisplayName="GWinGet"
+        Description="GUI Application for Windows Package Manager Client"
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"
         Square44x44Logo="Images\Square44x44Logo.png">
-        <uap:DefaultTile Wide310x150Logo="Images\Wide310x150Logo.png" />
+        <uap:DefaultTile Wide310x150Logo="Images\Wide310x150Logo.png"  Square71x71Logo="Images\SmallTile.png" Square310x310Logo="Images\LargeTile.png"/>
         <uap:SplashScreen Image="Images\SplashScreen.png" />
       </uap:VisualElements>
     </Application>

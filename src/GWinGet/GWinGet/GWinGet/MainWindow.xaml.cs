@@ -28,6 +28,8 @@ namespace GWinGet
         public MainWindow()
         {
             this.InitializeComponent();
+
+            this.ExtendsContentIntoTitleBar = true;
         }
 
         private void MainNavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

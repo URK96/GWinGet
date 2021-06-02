@@ -19,11 +19,13 @@
         <Grid Grid.Row="0">
             
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <AutoSuggestBox Grid.Column="0" Margin="10, 5, 10, 0" />
+            <AutoSuggestBox x:Name="PackageSearchBox" Grid.Column="0" Margin="10, 5, 10, 0" 
+                            PlaceholderText="Search Package" QueryIcon="Find"
+                            QuerySubmitted="PackageSearchBox_QuerySubmitted"/>
 
             <CommandBar Grid.Column="1" IsOpen="False" HorizontalAlignment="Stretch" Background="Transparent">
                 <AppBarButton Icon="Refresh" Label="Refresh List" Click="AppBarButton_Click" />

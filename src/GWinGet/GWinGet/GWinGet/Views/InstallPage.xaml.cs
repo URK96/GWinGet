@@ -52,7 +52,7 @@ namespace GWinGet.Views
             {
                 PackageDBService.RefreshList();
 
-                DispatcherQueue.TryEnqueue(() => { PackageDataGrid.ItemsSource = PackageDBService.AvailablePackages; });
+                DispatcherQueue.TryEnqueue(() => { FilterPackages(); });
             });
 
             BusyPanel.Visibility = Visibility.Collapsed;
@@ -62,6 +62,15 @@ namespace GWinGet.Views
             //File.WriteAllText(@"C:\Users\URK96\GWinGetError.txt", PackageDBService.AvailablePackages.Last().Name);
         }
 
+        private void FilterPackages()
+        {
+            var queryString = PackageSearchBox.Text;
+
+            PackageDataGrid.ItemsSource = !string.IsNullOrWhiteSpace(queryString) ?
+                PackageDBService.AvailablePackages.FindAll(x => x.Name.Contains(queryString, StringComparison.OrdinalIgnoreCase)) :
+                PackageDBService.AvailablePackages;
+        }
+
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
             RefreshPackages();
@@ -69,7 +78,13 @@ namespace GWinGet.Views
 
         private void PackageDataGrid_AutoGeneratingColumn(object sender, CommunityToolkit.WinUI.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)
         {
+            e.Column.Width = CommunityToolkit.WinUI.UI.Controls.DataGridLength.SizeToHeader;
+            e.Column.MinWidth = 300;
+        }
 
+        private void PackageSearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            FilterPackages();
         }
     }
 }
