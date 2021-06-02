@@ -2,6 +2,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,35 +12,91 @@ namespace GWinGet.Models
 {
     public class PackageDB : DbContext
     {
-        private readonly string connectionStr;
-
-        public DbSet<manifest> Manifests { get; set; }
-        public DbSet<ids> Ids { get; set; }
-        public DbSet<names> Names { get; set; }
+        public DbSet<Manifest> Manifests { get; set; }
+        public DbSet<Ids> Ids { get; set; }
+        public DbSet<Names> Names { get; set; }
+        public DbSet<Versions> Versions { get; set; }
+        public DbSet<Publishers> Publishers { get; set; }
+        public DbSet<PublishersMap> PublishersMaps { get; set; }
 
         public PackageDB(DbContextOptions<PackageDB> options) : base(options) { }
     }
 
-    public class manifest
+    [Table("manifest")]
+    public class Manifest
     {
-        public int rowid { get; set; }
-        public long id { get; set; }
-        public long name { get; set; }
-        public long moniker { get; set; }
-        public long version { get; set; }
-        public long channel { get; set; }
-        public long pathpart { get; set; }
+        [Key]
+        [Column("rowid")]
+        public int RowId { get; set; }
+
+        [Column("id")]
+        public long Id { get; set; }
+        [Column("name")]
+        public long NameId { get; set; }
+        [Column("moniker")]
+        public long MonikerId { get; set; }
+        [Column("version")]
+        public long VersionId { get; set; }
+        [Column("channel")]
+        public long ChannelId { get; set; }
+        [Column("pathpart")]
+        public long PathPartId { get; set; }
+        [Column("hash")]
+        public string Hash { get; set; }
     }
 
-    public class ids
+    [Table("ids")]
+    public class Ids
     {
-        public int rowid { get; set; }
-        public string id { get; set; }
+        [Key]
+        [Column("rowid")]
+        public int RowId { get; set; }
+
+        [Column("id")]
+        public string Id { get; set; }
     }
 
-    public class names
+    [Table("names")]
+    public class Names
     {
-        public int rowid { get; set; }
-        public string name { get; set; }
+        [Key]
+        [Column("rowid")]
+        public int RowId { get; set; }
+
+        [Column("name")]
+        public string Name { get; set; }
+    }
+
+    [Table("versions")]
+    public class Versions
+    {
+        [Key]
+        [Column("rowid")]
+        public int RowId { get; set; }
+
+        [Column("version")]
+        public string Version { get; set; }
+    }
+
+    [Table("norm_publishers")]
+    public class Publishers
+    {
+        [Key]
+        [Column("rowid")]
+        public int RowId { get; set; }
+
+        [Column("norm_publisher")]
+        public string Publisher { get; set; }
+    }
+
+    [Table("norm_publishers_map")]
+    public class PublishersMap
+    {
+        [Key]
+        [Column("manifest")]
+        public long ManifestId { get; set; }
+
+        [Column("norm_publisher")]
+        public long PublisherId { get; set; }
     }
 }

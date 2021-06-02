@@ -9,12 +9,38 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel>
-        <CommandBar IsOpen="False" HorizontalAlignment="Stretch" Background="Transparent">
-            <AppBarButton Icon="Refresh" Label="Refresh List" Click="AppBarButton_Click" />
-        </CommandBar>
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <ListView x:Name="LV"/>
-    </StackPanel>
+        <Grid Grid.Row="0">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <AutoSuggestBox Grid.Column="0" Margin="10, 5, 10, 0" />
+
+            <CommandBar Grid.Column="1" IsOpen="False" HorizontalAlignment="Stretch" Background="Transparent">
+                <AppBarButton Icon="Refresh" Label="Refresh List" Click="AppBarButton_Click" />
+            </CommandBar>
+
+        </Grid>
+
+        <StackPanel x:Name="BusyPanel" Grid.Row="1" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ProgressRing x:Name="BusyRing" Width="50" Height="50"
+                          IsActive="False"/>
+            <TextBlock x:Name="BusyStatus"
+                       TextAlignment="Center"/>
+        </StackPanel>
+
+        <controls:DataGrid x:Name="PackageDataGrid" Grid.Row="1"
+                           AutoGenerateColumns="True" IsReadOnly="True" 
+                           AutoGeneratingColumn="PackageDataGrid_AutoGeneratingColumn"/>
+    </Grid>
 
 </Page>

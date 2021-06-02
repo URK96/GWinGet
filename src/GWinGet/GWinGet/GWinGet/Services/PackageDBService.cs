@@ -27,12 +27,54 @@ namespace GWinGet.Services
         public void RefreshList()
         {
             var dbPath = GetNewestDBPath();
-            var connectionStr = @$"Data Source={dbPath};Pooling=true;FailIfMissing=false";
+            var connectionStr = @$"Data Source={dbPath}";
             var connectionOption = new DbContextOptionsBuilder<PackageDB>()
                 .UseSqlite(connectionStr)
                 .Options;
 
             using var context = new PackageDB(connectionOption);
+
+            AvailablePackages.Clear();
+
+            try
+            {
+                foreach (var item in context.Manifests)
+                {
+                    var packageId = context.Ids.Find((int)item.Id).Id;
+                    var index = AvailablePackages.FindIndex(x => x.PackageId.Equals(packageId));
+
+                    var refVersion = context.Versions.Find((int)item.VersionId).Version;
+
+                    if (index < 0)
+                    {
+                        var newPackage = new Package
+                        {
+                            Name = context.Names.Find((int)item.NameId).Name,
+                            PackageId = context.Ids.Find((int)item.Id).Id,
+                            Publisher = context.Publishers.Find((int)context.PublishersMaps.Find((long)item.RowId).PublisherId).Publisher
+                        };
+
+                        newPackage.versions = new List<string>
+                        {
+                            refVersion
+                        };
+
+                        AvailablePackages.Add(newPackage);
+                    }
+                    else
+                    {
+                        var package = AvailablePackages[index];
+
+                        package.versions.Add(refVersion);
+
+                        AvailablePackages[index] = package;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                File.WriteAllText(@"C:\Users\URK96\GWinGetError.txt", ex.ToString());
+            }
         }
 
         private string GetNewestDBPath()

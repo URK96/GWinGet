@@ -42,6 +42,8 @@ namespace GWinGet
                 var tag = item.Tag as string;
                 var page = Type.GetType($"GWinGet.Views.{tag}");
 
+                sender.Header = item.Content;
+
                 MainFrame.Navigate(page);
             }
         }

@@ -8,8 +8,11 @@ namespace GWinGet.Models
 {
     public class Package
     {
-        string Name { get; set; }
-        string Id { get; set; }
-        string Version { get; set; }
+        public string Name { get; set; }
+        public string PackageId { get; set; }
+        public string Version => versions.First();
+        public string Publisher { get; set; }
+
+        public List<string> versions = new List<string>();
     }
 }
