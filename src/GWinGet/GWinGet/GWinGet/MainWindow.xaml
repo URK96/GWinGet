@@ -12,6 +12,7 @@
 
         <NavigationView.MenuItems>
             <NavigationViewItem Icon="Download" Content="Install" Tag="InstallPage" />
+            <NavigationViewItem Icon="Manage" Content="Manage" Tag="ManagePage" />
         </NavigationView.MenuItems>
         
 

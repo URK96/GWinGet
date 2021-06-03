@@ -30,13 +30,17 @@ namespace GWinGet
             this.InitializeComponent();
 
             this.ExtendsContentIntoTitleBar = true;
+            this.Title = "GWinGet";
         }
 
         private void MainNavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             if (args.IsSettingsSelected)
             {
+                var item = args.SelectedItem as NavigationViewItem;
+                sender.Header = item.Content;
 
+                MainFrame.Navigate(typeof(Views.SettingPage));
             }
             else
             {
