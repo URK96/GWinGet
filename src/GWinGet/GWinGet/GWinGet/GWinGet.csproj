@@ -6,13 +6,16 @@
     <RootNamespace>GWinGet</RootNamespace>
     <Platforms>x86;x64;arm64</Platforms>
     <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
-    <ApplicationIcon>icons8-box-settings-96.ico</ApplicationIcon>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
     <Win32Resource />
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Views\ErrorDialog.xaml" />
+    <None Remove="Views\InstallDialog.xaml" />
     <None Remove="Views\InstallPage.xaml" />
+    <None Remove="Views\ManagePage.xaml" />
+    <None Remove="Views\SettingPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +28,24 @@
     <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.5.7" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.114.3" />
     <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\ManagePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\SettingPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\InstallDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

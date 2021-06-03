@@ -15,9 +15,18 @@ namespace GWinGet.Services
 {
     public class PackageDBService
     {
+        const string MAJOR_VER_KEY = "majorVersion";
+        const string MINOR_VER_KEY = "minorVersion";
+        const string LAST_WRITE_KEY = "lastwritetime";
         const string APPDATA_PATH = @"C:\Program Files\WindowsApps";
 
         public List<Package> AvailablePackages { get; private set; }
+
+        public string DBVersion => $"{dbMajorVersion}.{dbMinorVersion} ({dbLastWriteTime})";
+
+        public string dbMajorVersion;
+        public string dbMinorVersion;
+        public string dbLastWriteTime;
 
         public PackageDBService()
         {
@@ -70,6 +79,10 @@ namespace GWinGet.Services
                         AvailablePackages[index] = package;
                     }
                 }
+
+                dbMajorVersion = context.Metadatas.Find(MAJOR_VER_KEY)?.Value;
+                dbMinorVersion = context.Metadatas.Find(MINOR_VER_KEY)?.Value;
+                dbLastWriteTime = context.Metadatas.Find(LAST_WRITE_KEY)?.Value;
             }
             catch (Exception ex)
             {

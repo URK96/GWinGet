@@ -9,7 +9,7 @@
   <Identity
     Name="51675URK96.GWinGet"
     Publisher="CN=558FBEBE-C1DE-4502-AFA1-2ACF1A20C1EE"
-    Version="0.0.1.0" />
+    Version="0.1.1.0" />
 
   <Properties>
     <DisplayName>GWinGet</DisplayName>

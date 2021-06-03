@@ -19,6 +19,9 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
+using GWinGet.Models;
+using System.Diagnostics;
+
 namespace GWinGet.Views
 {
     public sealed partial class InstallPage : Page
@@ -30,14 +33,15 @@ namespace GWinGet.Views
             this.InitializeComponent();
 
             PackageDBService = new Services.PackageDBService();
+
+            RefreshPackages();
         }
 
         private async void RefreshPackages()
         {
-            BusyPanel.Visibility = Visibility.Visible;
-            BusyRing.IsActive = true;
+            StartBusy();
+
             BusyStatus.Text = "Update WinGet DB";
-            PackageDataGrid.IsEnabled = false;
 
             using var ps = PowerShell.Create();
 
@@ -50,16 +54,24 @@ namespace GWinGet.Views
 
             await Task.Run(() =>
             {
-                PackageDBService.RefreshList();
+                try
+                {
+                    PackageDBService.RefreshList();
 
-                DispatcherQueue.TryEnqueue(() => { FilterPackages(); });
+                    DispatcherQueue.TryEnqueue(() =>
+                    {
+                        FilterPackages();
+
+                        DBVersionBlock.Text = $"DB Ver : {PackageDBService.DBVersion}";
+                    });
+                }
+                catch (Exception ex)
+                {
+                    //File.WriteAllText(@"C:\Users\chlwl\GWinGet\RefreshListError.txt", ex.ToString());
+                }
             });
 
-            BusyPanel.Visibility = Visibility.Collapsed;
-            BusyRing.IsActive = false;
-            PackageDataGrid.IsEnabled = true;
-
-            //File.WriteAllText(@"C:\Users\URK96\GWinGetError.txt", PackageDBService.AvailablePackages.Last().Name);
+            EndBusy();
         }
 
         private void FilterPackages()
@@ -71,9 +83,52 @@ namespace GWinGet.Views
                 PackageDBService.AvailablePackages;
         }
 
+        private async void RunInstall(Package package)
+        {
+            var dialog = new InstallDialog(package)
+            {
+                XamlRoot = Content.XamlRoot
+            };
+
+            await dialog.ShowAsync();
+        }
+
+        private void StartBusy()
+        {
+            BusyPanel.Visibility = Visibility.Visible;
+            BusyRing.IsActive = true;
+            
+            PackageDataGrid.Visibility = Visibility.Collapsed;
+            PackageListCommandBar.IsEnabled = false;
+            PackageSearchBox.IsEnabled = false;
+        }
+
+        private void EndBusy()
+        {
+            BusyPanel.Visibility = Visibility.Collapsed;
+            BusyRing.IsActive = false;
+
+            PackageDataGrid.Visibility = Visibility.Visible;
+            PackageListCommandBar.IsEnabled = true;
+            PackageSearchBox.IsEnabled = true;
+        }
+
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
-            RefreshPackages();
+            switch ((sender as AppBarButton).Tag as string)
+            {
+                case "Install":
+                    if (PackageDataGrid.SelectedItems.Count > 0)
+                    {
+                        RunInstall(PackageDataGrid.SelectedItem as Package);
+                    }
+                    break;
+                case "Refresh":
+                    RefreshPackages();
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void PackageDataGrid_AutoGeneratingColumn(object sender, CommunityToolkit.WinUI.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)

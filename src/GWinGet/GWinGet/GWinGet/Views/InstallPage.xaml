@@ -9,9 +9,10 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Grid x:Name="RootGrid">
         
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -19,7 +20,7 @@
         <Grid Grid.Row="0">
             
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
@@ -27,22 +28,29 @@
                             PlaceholderText="Search Package" QueryIcon="Find"
                             QuerySubmitted="PackageSearchBox_QuerySubmitted"/>
 
-            <CommandBar Grid.Column="1" IsOpen="False" HorizontalAlignment="Stretch" Background="Transparent">
-                <AppBarButton Icon="Refresh" Label="Refresh List" Click="AppBarButton_Click" />
+            <CommandBar x:Name="PackageListCommandBar" Grid.Column="2" IsOpen="False" HorizontalAlignment="Stretch" Background="Transparent">
+                <AppBarButton Icon="Download" Label="Download &amp; Install" Tag="Install" 
+                              Click="AppBarButton_Click"/>
+                <AppBarButton Icon="Refresh" Label="Refresh List" Tag="Refresh"
+                              Click="AppBarButton_Click"/>
             </CommandBar>
 
         </Grid>
 
-        <StackPanel x:Name="BusyPanel" Grid.Row="1" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBlock x:Name="DBVersionBlock" Grid.Row="1" Margin="0, 5, 10, 5"  VerticalAlignment="Center"
+                   Text="DB Ver : " TextAlignment="Right" />
+
+        <StackPanel x:Name="BusyPanel" Grid.Row="2" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center">
             <ProgressRing x:Name="BusyRing" Width="50" Height="50"
                           IsActive="False"/>
-            <TextBlock x:Name="BusyStatus"
+            <TextBlock x:Name="BusyStatus" Margin="0, 10, 0, 0"
                        TextAlignment="Center"/>
         </StackPanel>
 
-        <controls:DataGrid x:Name="PackageDataGrid" Grid.Row="1"
+        <controls:DataGrid x:Name="PackageDataGrid" Grid.Row="2"
                            AutoGenerateColumns="True" IsReadOnly="True" 
                            AutoGeneratingColumn="PackageDataGrid_AutoGeneratingColumn"/>
+        
     </Grid>
 
 </Page>

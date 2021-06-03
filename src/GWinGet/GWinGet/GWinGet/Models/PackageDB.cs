@@ -12,6 +12,7 @@ namespace GWinGet.Models
 {
     public class PackageDB : DbContext
     {
+        public DbSet<Metadata> Metadatas { get; set; }
         public DbSet<Manifest> Manifests { get; set; }
         public DbSet<Ids> Ids { get; set; }
         public DbSet<Names> Names { get; set; }
@@ -20,6 +21,17 @@ namespace GWinGet.Models
         public DbSet<PublishersMap> PublishersMaps { get; set; }
 
         public PackageDB(DbContextOptions<PackageDB> options) : base(options) { }
+    }
+
+    [Table("metadata")]
+    public class Metadata
+    {
+        [Key]
+        [Column("name")]
+        public string Name { get; set; }
+
+        [Column("value")]
+        public string Value { get; set; }
     }
 
     [Table("manifest")]
