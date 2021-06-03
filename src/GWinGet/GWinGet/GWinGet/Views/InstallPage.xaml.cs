@@ -115,20 +115,7 @@ namespace GWinGet.Views
 
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
-            switch ((sender as AppBarButton).Tag as string)
-            {
-                case "Install":
-                    if (PackageDataGrid.SelectedItems.Count > 0)
-                    {
-                        RunInstall(PackageDataGrid.SelectedItem as Package);
-                    }
-                    break;
-                case "Refresh":
-                    RefreshPackages();
-                    break;
-                default:
-                    break;
-            }
+            RefreshPackages();
         }
 
         private void PackageDataGrid_AutoGeneratingColumn(object sender, CommunityToolkit.WinUI.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)

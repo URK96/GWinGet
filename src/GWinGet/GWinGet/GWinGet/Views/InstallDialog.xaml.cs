@@ -63,13 +63,11 @@ namespace GWinGet.Views
                 //psDataCollection = new PSDataCollection<PSObject>();
                 //psDataCollection.DataAdded += (sender, e) =>
                 //{
-                //    File.WriteAllText(@$"C:\Users\URK96\GWinGetLog\{e.Index}.txt", e.Index.ToString());
                 //    InstallStatus.Text = psDataCollection[e.Index].ToString();
                 //};
 
                 ps.InvocationStateChanged += (sender, e) =>
                 {
-                    //File.WriteAllText(@$"C:\Users\URK96\GWinGetLog\State.txt", e.InvocationStateInfo.State.ToString());
 
                     if (e.InvocationStateInfo.State is
                         PSInvocationState.Completed or
@@ -86,7 +84,6 @@ namespace GWinGet.Views
             }
             catch (Exception ex)
             {
-                //File.WriteAllText(@"C:\Users\URK96\GWinGetLog\GWinGetError.txt", ex.ToString());
             }
         }
 
@@ -99,11 +96,6 @@ namespace GWinGet.Views
                 var psi = new ProcessStartInfo()
                 {
                     FileName = "winget",
-                    Arguments = $"install \"{package.Name}\"",
-                    CreateNoWindow = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    RedirectStandardInput = true,
                 };
                 psi.StandardOutputEncoding = Encoding.UTF8;
 
@@ -123,7 +115,6 @@ namespace GWinGet.Views
             }
             catch (Exception ex)
             {
-                //File.WriteAllText(@"C:\Users\URK96\GWinGetLog\GWinGetError.txt", ex.ToString());
             }
 
             EndBusy();
@@ -133,12 +124,12 @@ namespace GWinGet.Views
         {
             DispatcherQueue.TryEnqueue(() =>
             {
-                BusyPanel.Visibility = Visibility.Visible;
-                BusyRing.IsActive = true;
-                BusyStatus.Text = "Donwload & Install package...";
+            BusyPanel.Visibility = Visibility.Visible;
+            BusyRing.IsActive = true;
+            BusyStatus.Text = "Donwload & Install package...";
 
-                InstallButton.IsEnabled = false;
-                CloseButton.IsEnabled = false;
+            InstallButton.IsEnabled = false;
+            CloseButton.IsEnabled = false;
             });
         }
 
@@ -146,11 +137,10 @@ namespace GWinGet.Views
         {
             DispatcherQueue.TryEnqueue(() =>
             {
-                BusyRing.IsIndeterminate = false;
-                BusyRing.Value = 100;
-                BusyStatus.Text = "Finish install process";
+            BusyRing.IsIndeterminate = false;
+            BusyRing.Value = 100;
 
-                CloseButton.IsEnabled = true;
+            CloseButton.IsEnabled = true;
             });
         }
 
@@ -159,8 +149,6 @@ namespace GWinGet.Views
             switch ((sender as Button).Tag as string)
             {
                 case "Install":
-                    // InstallProcess();
-                    InstallProcessAlt();
                     break;
                 default:
                     Hide();
