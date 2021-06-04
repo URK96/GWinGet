@@ -8,7 +8,6 @@ using Microsoft.UI.Xaml.Navigation;
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -24,18 +23,24 @@ namespace GWinGet.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class SettingPage : Page
+    public sealed partial class LogViewerDialog : ContentDialog
     {
-        public SettingPage()
+        public LogViewerDialog(string fileName)
         {
-            try
-            {
-                this.InitializeComponent();
-            }
-            catch (Exception ex)
-            {
-                Services.LogService.WriteLog($"SettingLog_{DateTime.Now.Ticks}.txt", ex.ToString());
-            }
+            this.InitializeComponent();
+
+            LogFileNameBlock.Text = fileName;
+
+            LoadLogContent(fileName);
+        }
+
+        private void LoadLogContent(string logFileName)
+        {
+            var logFilePath = Path.Combine(Services.LogService.LogPath, logFileName);
+
+            LogContentBox.Document.SetText(Microsoft.UI.Text.TextSetOptions.ApplyRtfDocumentDefaults, File.ReadAllText(logFilePath));
+
+            LogContentBox.IsReadOnly = true;
         }
     }
 }

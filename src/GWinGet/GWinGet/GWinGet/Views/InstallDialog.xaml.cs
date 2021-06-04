@@ -27,8 +27,7 @@ namespace GWinGet.Views
     {
         private Package package;
 
-        private PowerShell ps;
-        private PSDataCollection<PSObject> psDataCollection;
+        private string logFileName;
 
         public InstallDialog(Package package)
         {
@@ -55,81 +54,70 @@ namespace GWinGet.Views
         {
             StartBusy();
 
-            try
+            var installDateTimeStr = $"{DateTime.Now:yyyyMMddHHmmss}";
+
+            logFileName = $"{package.Name}_Install_Log_{installDateTimeStr}.txt";
+
+            var psi = new ProcessStartInfo()
             {
-                using var ps = PowerShell.Create()
-                    .AddScript($"winget install {package.Name}");
+                FileName = "winget",
+                Arguments = $"install \"{package.Name}\"",
+                CreateNoWindow = true,
+                RedirectStandardError = true,
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true
+            };
+            psi.StandardOutputEncoding = Encoding.UTF8;
 
-                //psDataCollection = new PSDataCollection<PSObject>();
-                //psDataCollection.DataAdded += (sender, e) =>
-                //{
-                //    InstallStatus.Text = psDataCollection[e.Index].ToString();
-                //};
+            var p = new Process();
+            p.StartInfo = psi;
 
-                ps.InvocationStateChanged += (sender, e) =>
-                {
-
-                    if (e.InvocationStateInfo.State is
-                        PSInvocationState.Completed or
-                        PSInvocationState.Stopped)
-                    {
-                        DispatcherQueue.TryEnqueue(() => { EndBusy(); });
-
-                        ps?.Dispose();
-                    }
-                };
-
-                //_ = await ps.InvokeAsync(new PSDataCollection<PSObject>(), psDataCollection);
-                _ = await ps.InvokeAsync();
-            }
-            catch (Exception ex)
+            p.OutputDataReceived += (sender, e) =>
             {
-            }
-        }
+                Services.LogService.AppendLog(logFileName, e.Data);
+                DispatcherQueue.TryEnqueue(() => { InstallStatus.Text = e.Data; });
+            };
 
-        private async void InstallProcessAlt()
-        {
-            StartBusy();
+            p.Start();
+            p.BeginOutputReadLine();
 
-            try
-            {
-                var psi = new ProcessStartInfo()
-                {
-                    FileName = "winget",
-                };
-                psi.StandardOutputEncoding = Encoding.UTF8;
-
-                var p = new Process();
-                p.StartInfo = psi;
-
-                p.OutputDataReceived += (sender, e) =>
-                {
-                    //File.AppendAllText(@$"C:\Users\URK96\GWinGetLog\{package.Name}_Install_Log.txt", $"{e.Data}\n");
-                    DispatcherQueue.TryEnqueue(() => { InstallStatus.Text = e.Data; });
-                };
-
-                p.Start();
-                p.BeginOutputReadLine();
-
-                await p.WaitForExitAsync();
-            }
-            catch (Exception ex)
-            {
-            }
+            await p.WaitForExitAsync();
 
             EndBusy();
+        }
+
+        private async void OpenLogViewer()
+        {
+            Hide();
+
+            await Task.Delay(500);
+
+            try
+            {
+                var logDialog = new LogViewerDialog(logFileName)
+                {
+                    XamlRoot = this.XamlRoot
+                };
+
+                await logDialog.ShowAsync();
+            }
+            catch (Exception ex)
+            {
+                Services.LogService.WriteLog("LogViewerError.txt", ex.ToString());
+            }
         }
 
         private void StartBusy()
         {
             DispatcherQueue.TryEnqueue(() =>
             {
-            BusyPanel.Visibility = Visibility.Visible;
-            BusyRing.IsActive = true;
-            BusyStatus.Text = "Donwload & Install package...";
+                BusyPanel.Visibility = Visibility.Visible;
+                BusyRing.IsActive = true;
+                BusyStatus.Text = "Donwload & Install package...";
 
-            InstallButton.IsEnabled = false;
-            CloseButton.IsEnabled = false;
+                InstallButton.IsEnabled = false;
+                InstallButton.Visibility = Visibility.Collapsed;
+                CloseButton.IsEnabled = false;
             });
         }
 
@@ -137,10 +125,12 @@ namespace GWinGet.Views
         {
             DispatcherQueue.TryEnqueue(() =>
             {
-            BusyRing.IsIndeterminate = false;
-            BusyRing.Value = 100;
+                BusyRing.IsIndeterminate = false;
+                BusyRing.Value = 100;
+                BusyStatus.Text = "Finish install process";
 
-            CloseButton.IsEnabled = true;
+                ViewLogButton.IsEnabled = true;
+                CloseButton.IsEnabled = true;
             });
         }
 
@@ -149,6 +139,10 @@ namespace GWinGet.Views
             switch ((sender as Button).Tag as string)
             {
                 case "Install":
+                    InstallProcess();
+                    break;
+                case "ViewLog":
+                    OpenLogViewer();
                     break;
                 default:
                     Hide();

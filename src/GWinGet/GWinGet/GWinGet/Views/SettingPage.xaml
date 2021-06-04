@@ -8,5 +8,5 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Button x:Name="TestButton" Click="Button_Click" />
+    <Button />
 </Page>

@@ -37,10 +37,17 @@ namespace GWinGet
         {
             if (args.IsSettingsSelected)
             {
-                var item = args.SelectedItem as NavigationViewItem;
-                sender.Header = item.Content;
+                try
+                {
+                    var item = args.SelectedItem as NavigationViewItem;
+                    sender.Header = item.Content;
 
-                MainFrame.Navigate(typeof(Views.SettingPage));
+                    MainFrame.Navigate(typeof(Views.SettingPage));
+                }
+                catch (Exception ex)
+                {
+                    Services.LogService.WriteLog($"RunSetting_{DateTime.Now.Ticks}.txt", ex.ToString());
+                }
             }
             else
             {

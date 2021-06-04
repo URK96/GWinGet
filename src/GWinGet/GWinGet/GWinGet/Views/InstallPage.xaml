@@ -49,7 +49,13 @@
 
         <controls:DataGrid x:Name="PackageDataGrid" Grid.Row="2"
                            AutoGenerateColumns="True" IsReadOnly="True" 
-                           AutoGeneratingColumn="PackageDataGrid_AutoGeneratingColumn"/>
+                           AutoGeneratingColumn="PackageDataGrid_AutoGeneratingColumn">
+            <controls:DataGrid.Transitions>
+                <TransitionCollection>
+                    <ContentThemeTransition />
+                </TransitionCollection>
+            </controls:DataGrid.Transitions>
+        </controls:DataGrid>
         
     </Grid>
 

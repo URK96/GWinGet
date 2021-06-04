@@ -25,12 +25,14 @@
             
         </StackPanel>
 
-        <TextBlock x:Name="InstallStatus" Margin="0, 10, 0, 0"
+        <TextBlock x:Name="InstallStatus" Margin="0, 10, 0, 10"
                    TextWrapping="Wrap" />
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 
             <Button x:Name="InstallButton" Margin="0, 0, 10, 0" Content="Install" Background="SkyBlue" Tag="Install"
+                    Click="Button_Click" />
+            <Button x:Name="ViewLogButton" Margin="0, 0, 10, 0" Content="View Log" Background="LightGreen" Tag="ViewLog" IsEnabled="False"
                     Click="Button_Click" />
             <Button x:Name="CloseButton" Content="Close"
                     Click="Button_Click" />
