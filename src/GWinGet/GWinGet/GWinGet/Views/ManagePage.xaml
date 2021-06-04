@@ -3,10 +3,60 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:GWinGet.Views"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <ListView x:Name="TestList"/>
+    <Grid x:Name="RootGrid">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <AutoSuggestBox x:Name="PackageSearchBox" Grid.Column="0" Margin="10, 5, 10, 0" 
+                            PlaceholderText="Search Package" QueryIcon="Find"
+                            QuerySubmitted="PackageSearchBox_QuerySubmitted"/>
+
+            <CommandBar x:Name="PackageListCommandBar" Grid.Column="2" IsOpen="False" HorizontalAlignment="Stretch" Background="Transparent">
+                <AppBarButton Icon="Delete" Label="Uninstall" Tag="Uninstall" 
+                              Click="AppBarButton_Click"/>
+                <AppBarButton Icon="Refresh" Label="Refresh List" Tag="Refresh"
+                              Click="AppBarButton_Click"/>
+            </CommandBar>
+
+        </Grid>
+
+        <TextBlock x:Name="PackageCountBlock" Grid.Row="1" Margin="0, 5, 10, 5"  VerticalAlignment="Center"
+                   Text="Packages : 0" TextAlignment="Right" />
+
+        <StackPanel x:Name="BusyPanel" Grid.Row="2" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ProgressRing x:Name="BusyRing" Width="50" Height="50"
+                          IsActive="False"/>
+            <TextBlock x:Name="BusyStatus" Margin="0, 10, 0, 0"
+                       TextAlignment="Center"/>
+        </StackPanel>
+
+        <controls:DataGrid x:Name="PackageDataGrid" Grid.Row="2"
+                           AutoGenerateColumns="True" IsReadOnly="True" 
+                           AutoGeneratingColumn="PackageDataGrid_AutoGeneratingColumn">
+            <controls:DataGrid.Transitions>
+                <TransitionCollection>
+                    <ContentThemeTransition />
+                </TransitionCollection>
+            </controls:DataGrid.Transitions>
+        </controls:DataGrid>
+
+    </Grid>
+    
 </Page>

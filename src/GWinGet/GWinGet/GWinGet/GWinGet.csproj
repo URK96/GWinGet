@@ -17,6 +17,7 @@
     <None Remove="Views\LogViewerDialog.xaml" />
     <None Remove="Views\ManagePage.xaml" />
     <None Remove="Views\SettingPage.xaml" />
+    <None Remove="Views\UninstallDialog.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,12 @@
     <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.5.7" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.114.3" />
     <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\UninstallDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

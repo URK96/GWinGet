@@ -22,19 +22,29 @@ using Windows.Foundation.Collections;
 using GWinGet.Models;
 using System.Diagnostics;
 
+using AppEnv = GWinGet.AppEnvironment;
+using System.Text;
+
 namespace GWinGet.Views
 {
     public sealed partial class InstallPage : Page
     {
-        public Services.PackageDBService PackageDBService { get; }
+        private Services.PackageDBService PackageDBService => AppEnv.packageDBService;
 
         public InstallPage()
         {
             this.InitializeComponent();
 
-            PackageDBService = new Services.PackageDBService();
+            if (PackageDBService == null)
+            {
+                AppEnv.packageDBService = new Services.PackageDBService();
 
-            RefreshPackages();
+                RefreshPackages();
+            }
+            else
+            {
+                FilterPackages();
+            }
         }
 
         private async void RefreshPackages()
@@ -43,12 +53,26 @@ namespace GWinGet.Views
 
             BusyStatus.Text = "Update WinGet DB";
 
-            using var ps = PowerShell.Create();
+            var psi = new ProcessStartInfo()
+            {
+                FileName = "winget",
+                Arguments = $"search",
+                CreateNoWindow = true,
+                RedirectStandardError = true,
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true
+            };
+            psi.StandardOutputEncoding = Encoding.UTF8;
 
-            ps.AddCommand("winget");
-            ps.AddArgument("search");
+            using var p = new Process()
+            {
+                StartInfo = psi
+            };
 
-            _ = await ps.InvokeAsync();
+            p.Start();
+            p.BeginOutputReadLine();
+
+            await p.WaitForExitAsync();
 
             BusyStatus.Text = "List packages";
 
@@ -58,16 +82,11 @@ namespace GWinGet.Views
                 {
                     PackageDBService.RefreshList();
 
-                    DispatcherQueue.TryEnqueue(() =>
-                    {
-                        FilterPackages();
-
-                        DBVersionBlock.Text = $"DB Ver : {PackageDBService.DBVersion}";
-                    });
+                    DispatcherQueue.TryEnqueue(() => { FilterPackages(); });
                 }
                 catch (Exception ex)
                 {
-                    //File.WriteAllText(@"C:\Users\chlwl\GWinGet\RefreshListError.txt", ex.ToString());
+                    Services.LogService.WriteLog("ListPackagesError.txt", ex.ToString());
                 }
             });
 
@@ -78,12 +97,21 @@ namespace GWinGet.Views
         {
             var queryString = PackageSearchBox.Text;
 
-            PackageDataGrid.ItemsSource = !string.IsNullOrWhiteSpace(queryString) ?
+            var resultList = !string.IsNullOrWhiteSpace(queryString) ?
                 PackageDBService.AvailablePackages.FindAll(x => x.Name.Contains(queryString, StringComparison.OrdinalIgnoreCase)) :
                 PackageDBService.AvailablePackages;
+
+            RefreshListUI(resultList);
         }
 
-        private async void RunInstall(Package package)
+        private void RefreshListUI(List<Package> list)
+        {
+            PackageDataGrid.ItemsSource = list;
+
+            DBVersionBlock.Text = $"DB Ver : {PackageDBService.DBVersion}";
+        }
+
+        private async void ShowInstallDialog(Package package)
         {
             var dialog = new InstallDialog(package)
             {
@@ -95,22 +123,28 @@ namespace GWinGet.Views
 
         private void StartBusy()
         {
-            BusyPanel.Visibility = Visibility.Visible;
-            BusyRing.IsActive = true;
-            
-            PackageDataGrid.Visibility = Visibility.Collapsed;
-            PackageListCommandBar.IsEnabled = false;
-            PackageSearchBox.IsEnabled = false;
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                BusyPanel.Visibility = Visibility.Visible;
+                BusyRing.IsActive = true;
+
+                PackageDataGrid.Visibility = Visibility.Collapsed;
+                PackageListCommandBar.IsEnabled = false;
+                PackageSearchBox.IsEnabled = false;
+            });
         }
 
         private void EndBusy()
         {
-            BusyPanel.Visibility = Visibility.Collapsed;
-            BusyRing.IsActive = false;
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                BusyPanel.Visibility = Visibility.Collapsed;
+                BusyRing.IsActive = false;
 
-            PackageDataGrid.Visibility = Visibility.Visible;
-            PackageListCommandBar.IsEnabled = true;
-            PackageSearchBox.IsEnabled = true;
+                PackageDataGrid.Visibility = Visibility.Visible;
+                PackageListCommandBar.IsEnabled = true;
+                PackageSearchBox.IsEnabled = true;
+            });
         }
 
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
@@ -120,7 +154,7 @@ namespace GWinGet.Views
                 case "Install":
                     if (PackageDataGrid.SelectedItems.Count > 0)
                     {
-                        RunInstall(PackageDataGrid.SelectedItem as Package);
+                        ShowInstallDialog(PackageDataGrid.SelectedItem as Package);
                     }
                     break;
                 case "Refresh":

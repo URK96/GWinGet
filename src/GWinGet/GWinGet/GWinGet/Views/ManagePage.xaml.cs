@@ -10,40 +10,146 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Runtime.InteropServices.WindowsRuntime;
 
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Management.Deployment;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using AppEnv = GWinGet.AppEnvironment;
+using GWinGet.Models;
 
 namespace GWinGet.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class ManagePage : Page
     {
+        private Services.InstalledAppManager AppManager => AppEnv.installedAppManager;
+
         public ManagePage()
         {
             this.InitializeComponent();
 
-            try
+            if (AppManager == null)
             {
-                var pManager = new PackageManager();
-                var pList = pManager.FindPackages().ToList();
+                AppEnv.installedAppManager = new Services.InstalledAppManager();
 
-                var pNameList = from p in pList
-                                select p.DisplayName;
-
-                TestList.ItemsSource = pNameList;
+                RefreshInstalledList();
             }
-            catch (Exception ex)
+            else
             {
-                File.WriteAllText(@"C:\Users\chlwl\GWinGet\FindPackageError.txt", ex.ToString());
+                FilterPackages();
             }
+        }
+
+        private async void RefreshInstalledList()
+        {
+            StartBusy();
+
+            BusyStatus.Text = "List installed packages";
+
+            await Task.Delay(500);
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    AppManager.RefreshList();
+
+                    DispatcherQueue.TryEnqueue(() => { FilterPackages(); });
+                }
+                catch (Exception ex)
+                {
+                    Services.LogService.WriteLog("ListPackagesError.txt", ex.ToString());
+                }
+            });
+
+            EndBusy();
+        }
+
+        private void FilterPackages()
+        {
+            var queryString = PackageSearchBox.Text;
+
+            var resultList = !string.IsNullOrWhiteSpace(queryString) ?
+                AppManager.InstalledPackages.FindAll(x => x.Name.Contains(queryString, StringComparison.OrdinalIgnoreCase)) :
+                AppManager.InstalledPackages;
+
+            RefreshListUI(resultList);
+        }
+
+        private void RefreshListUI(List<Package> list)
+        {
+            PackageDataGrid.ItemsSource = list;
+
+            PackageCountBlock.Text = $"Packages : {AppManager.InstalledPackages.Count}";
+        }
+
+        private async void ShowUninstallDialog(Package package)
+        {
+            var dialog = new UninstallDialog(package)
+            {
+                XamlRoot = Content.XamlRoot
+            };
+
+            dialog.Closed += delegate { RefreshInstalledList(); };
+
+            await dialog.ShowAsync();
+        }
+
+        private void StartBusy()
+        {
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                BusyPanel.Visibility = Visibility.Visible;
+                BusyRing.IsActive = true;
+
+                PackageDataGrid.Visibility = Visibility.Collapsed;
+                PackageListCommandBar.IsEnabled = false;
+                PackageSearchBox.IsEnabled = false;
+            });
+        }
+
+        private void EndBusy()
+        {
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                BusyPanel.Visibility = Visibility.Collapsed;
+                BusyRing.IsActive = false;
+
+                PackageDataGrid.Visibility = Visibility.Visible;
+                PackageListCommandBar.IsEnabled = true;
+                PackageSearchBox.IsEnabled = true;
+            });
+        }
+
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch ((sender as AppBarButton).Tag as string)
+            {
+                case "Uninstall":
+                    if (PackageDataGrid.SelectedItems.Count > 0)
+                    {
+                        ShowUninstallDialog(PackageDataGrid.SelectedItem as Package);
+                    }
+                    break;
+                case "Refresh":
+                    RefreshInstalledList();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void PackageDataGrid_AutoGeneratingColumn(object sender, CommunityToolkit.WinUI.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)
+        {
+            e.Column.Width = CommunityToolkit.WinUI.UI.Controls.DataGridLength.SizeToHeader;
+            e.Column.MinWidth = 300;
+        }
+
+        private void PackageSearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            FilterPackages();
         }
     }
 }

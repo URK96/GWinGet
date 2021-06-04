@@ -1,4 +1,6 @@
-﻿using Microsoft.UI.Xaml;
+﻿using GWinGet.Models;
+
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -8,28 +10,25 @@ using Microsoft.UI.Xaml.Navigation;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
+using System.Threading.Tasks;
 
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
-using GWinGet.Models;
-using System.Text;
-using System.Management.Automation;
-using System.Diagnostics;
-using System.Threading.Tasks;
-
 namespace GWinGet.Views
 {
-    public sealed partial class InstallDialog : ContentDialog
+    public sealed partial class UninstallDialog : ContentDialog
     {
         private Package package;
 
         private string logFileName;
 
-        public InstallDialog(Package package)
+        public UninstallDialog(Package package)
         {
             this.InitializeComponent();
 
@@ -50,18 +49,18 @@ namespace GWinGet.Views
             PackageInfoBlock.Text = sb.ToString();
         }
 
-        private async void InstallProcess()
+        private async void UninstallProcess()
         {
             StartBusy();
 
-            var installDateTimeStr = $"{DateTime.Now:yyyyMMddHHmmss}";
+            var uninstallDateTimeStr = $"{DateTime.Now:yyyyMMddHHmmss}";
 
-            logFileName = $"{package.Name}_Install_Log_{installDateTimeStr}.txt";
+            logFileName = $"{package.Name}_Uninstall_Log_{uninstallDateTimeStr}.txt";
 
             var psi = new ProcessStartInfo()
             {
                 FileName = "winget",
-                Arguments = $"install \"{package.Name}\"",
+                Arguments = $"uninstall \"{package.Name}\"",
                 CreateNoWindow = true,
                 RedirectStandardError = true,
                 RedirectStandardInput = true,
@@ -77,7 +76,7 @@ namespace GWinGet.Views
             p.OutputDataReceived += (sender, e) =>
             {
                 Services.LogService.AppendLog(logFileName, e.Data);
-                DispatcherQueue.TryEnqueue(() => { InstallStatus.Text = e.Data; });
+                DispatcherQueue.TryEnqueue(() => { UninstallStatus.Text = e.Data; });
             };
 
             p.Start();
@@ -108,10 +107,10 @@ namespace GWinGet.Views
             {
                 BusyPanel.Visibility = Visibility.Visible;
                 BusyRing.IsActive = true;
-                BusyStatus.Text = "Donwload & Install package...";
+                BusyStatus.Text = "Uninstall package...";
 
-                InstallButton.IsEnabled = false;
-                InstallButton.Visibility = Visibility.Collapsed;
+                UninstallButton.IsEnabled = false;
+                UninstallButton.Visibility = Visibility.Collapsed;
                 CloseButton.IsEnabled = false;
             });
         }
@@ -122,7 +121,7 @@ namespace GWinGet.Views
             {
                 BusyRing.IsIndeterminate = false;
                 BusyRing.Value = 100;
-                BusyStatus.Text = "Finish install process";
+                BusyStatus.Text = "Finish uninstall process.\nIf extra process is exist on uninstaller, please follow that process.";
 
                 ViewLogButton.IsEnabled = true;
                 CloseButton.IsEnabled = true;
@@ -133,8 +132,8 @@ namespace GWinGet.Views
         {
             switch ((sender as Button).Tag as string)
             {
-                case "Install":
-                    InstallProcess();
+                case "Uninstall":
+                    UninstallProcess();
                     break;
                 case "ViewLog":
                     OpenLogViewer();

@@ -37,27 +37,27 @@ namespace GWinGet
         {
             if (args.IsSettingsSelected)
             {
-                try
-                {
-                    var item = args.SelectedItem as NavigationViewItem;
-                    sender.Header = item.Content;
+                var item = args.SelectedItem as NavigationViewItem;
+                sender.Header = item.Content;
 
-                    MainFrame.Navigate(typeof(Views.SettingPage));
-                }
-                catch (Exception ex)
-                {
-                    Services.LogService.WriteLog($"RunSetting_{DateTime.Now.Ticks}.txt", ex.ToString());
-                }
+                MainFrame.Navigate(typeof(Views.SettingPage));
             }
             else
             {
-                var item = args.SelectedItem as NavigationViewItem;
-                var tag = item.Tag as string;
-                var page = Type.GetType($"GWinGet.Views.{tag}");
+                try
+                {
+                    var item = args.SelectedItem as NavigationViewItem;
+                    var tag = item.Tag as string;
+                    var page = Type.GetType($"GWinGet.Views.{tag}");
 
-                sender.Header = item.Content;
+                    sender.Header = item.Content;
 
-                MainFrame.Navigate(page);
+                    MainFrame.Navigate(page);
+                }
+                catch (Exception ex)
+                {
+                    Services.LogService.WriteLog("NavSelectError.txt", ex.ToString());
+                }
             }
         }
     }

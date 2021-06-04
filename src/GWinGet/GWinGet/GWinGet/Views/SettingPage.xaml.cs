@@ -28,14 +28,7 @@ namespace GWinGet.Views
     {
         public SettingPage()
         {
-            try
-            {
-                this.InitializeComponent();
-            }
-            catch (Exception ex)
-            {
-                Services.LogService.WriteLog($"SettingLog_{DateTime.Now.Ticks}.txt", ex.ToString());
-            }
+            this.InitializeComponent();
         }
     }
 }
