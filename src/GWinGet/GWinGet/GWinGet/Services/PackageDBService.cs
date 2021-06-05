@@ -4,11 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Data.SQLite;
-using System.Data.SQLite.Generic;
 
 using GWinGet.Models;
-using System.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace GWinGet.Services

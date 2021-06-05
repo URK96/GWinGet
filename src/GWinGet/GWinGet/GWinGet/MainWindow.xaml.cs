@@ -15,14 +15,10 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using AppEnv = GWinGet.AppEnvironment;
 
 namespace GWinGet
 {
-    /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainWindow : Window
     {
         public MainWindow()
@@ -31,6 +27,8 @@ namespace GWinGet
 
             this.ExtendsContentIntoTitleBar = true;
             this.Title = "GWinGet";
+
+            //MainNavView.SelectedItem = MainNavView.MenuItems[0];
         }
 
         private void MainNavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -44,20 +42,21 @@ namespace GWinGet
             }
             else
             {
-                try
-                {
-                    var item = args.SelectedItem as NavigationViewItem;
-                    var tag = item.Tag as string;
-                    var page = Type.GetType($"GWinGet.Views.{tag}");
+                var item = args.SelectedItem as NavigationViewItem;
+                var tag = item.Tag as string;
+                var page = Type.GetType($"GWinGet.Views.{tag}");
+                object arg = null;
 
-                    sender.Header = item.Content;
+                sender.Header = item.Content;
 
-                    MainFrame.Navigate(page);
-                }
-                catch (Exception ex)
+                if ((AppEnv.isWingetInstalled != true) &&
+                    (tag.Equals("InstallPage") || tag.Equals("ManagePage")))
                 {
-                    Services.LogService.WriteLog("NavSelectError.txt", ex.ToString());
+                    page = typeof(Views.ErrorPage);
+                    arg = "Winget is not installed";
                 }
+
+                MainFrame.Navigate(page, arg);
             }
         }
     }

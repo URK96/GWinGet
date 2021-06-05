@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="GWinGet.Views.SettingPage"
+    x:Class="GWinGet.Views.ErrorPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:GWinGet.Views"
@@ -8,5 +8,6 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    
+    <TextBlock x:Name="ErrorMessageBlock" HorizontalAlignment="Center" VerticalAlignment="Center"
+               TextAlignment="Center" FontWeight="SemiBold" />
 </Page>

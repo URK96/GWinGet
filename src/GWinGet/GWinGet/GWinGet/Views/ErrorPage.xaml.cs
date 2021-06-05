@@ -17,13 +17,18 @@ using Windows.Foundation.Collections;
 
 namespace GWinGet.Views
 {
-    public sealed partial class ErrorDialog : ContentDialog
-    { 
-        public ErrorDialog(string message)
+    public sealed partial class ErrorPage : Page
+    {
+        public ErrorPage()
         {
             this.InitializeComponent();
+        }
 
-            MessageBlock.Text = message;
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            ErrorMessageBlock.Text = (e.Parameter ?? string.Empty) as string;
         }
     }
 }

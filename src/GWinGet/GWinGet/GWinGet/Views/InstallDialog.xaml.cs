@@ -76,8 +76,8 @@ namespace GWinGet.Views
 
             p.OutputDataReceived += (sender, e) =>
             {
-                Services.LogService.AppendLog(logFileName, e.Data);
                 DispatcherQueue.TryEnqueue(() => { InstallStatus.Text = e.Data; });
+                Services.LogService.AppendLog(logFileName, e.Data);
             };
 
             p.Start();

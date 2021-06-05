@@ -12,5 +12,7 @@ namespace GWinGet
     {
         public static PackageDBService packageDBService;
         public static InstalledAppManager installedAppManager;
+
+        public static bool? isWingetInstalled = null;
     }
 }

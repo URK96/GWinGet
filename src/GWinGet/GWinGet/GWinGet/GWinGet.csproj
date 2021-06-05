@@ -11,10 +11,13 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Views\ErrorDialog.xaml" />
+    <None Remove="Resources\Images\appicon.png" />
+    <None Remove="Views\ErrorPage.xaml" />
+    <None Remove="Views\InfoPage.xaml" />
     <None Remove="Views\InstallDialog.xaml" />
     <None Remove="Views\InstallPage.xaml" />
     <None Remove="Views\LogViewerDialog.xaml" />
+    <None Remove="Views\MainPage.xaml" />
     <None Remove="Views\ManagePage.xaml" />
     <None Remove="Views\SettingPage.xaml" />
     <None Remove="Views\UninstallDialog.xaml" />
@@ -28,8 +31,25 @@
     <PackageReference Include="Microsoft.ProjectReunion" Version="0.5.7" />
     <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.5.7" />
     <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.5.7" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.114.3" />
     <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\ErrorPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\InfoPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>
@@ -58,12 +78,6 @@
 
   <ItemGroup>
     <Page Update="Views\InstallDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="Views\ErrorDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

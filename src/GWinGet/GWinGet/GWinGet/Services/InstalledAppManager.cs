@@ -43,7 +43,7 @@ namespace GWinGet.Services
                 {
                     Name = packageInfo.DisplayName,
                     PackageId = packageId.Name,
-                    Publisher = string.Empty
+                    Publisher = packageInfo.PublisherDisplayName
                 };
 
                 package.versions.Add(packageVersion);

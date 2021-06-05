@@ -83,6 +83,8 @@ namespace GWinGet.Views
             PackageDataGrid.ItemsSource = list;
 
             PackageCountBlock.Text = $"Packages : {AppManager.InstalledPackages.Count}";
+
+            GC.Collect();
         }
 
         private async void ShowUninstallDialog(Package package)
@@ -150,6 +152,14 @@ namespace GWinGet.Views
         private void PackageSearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             FilterPackages();
+        }
+
+        // Protect app crash cause memory
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            PackageDataGrid.ItemsSource = null;
         }
     }
 }
