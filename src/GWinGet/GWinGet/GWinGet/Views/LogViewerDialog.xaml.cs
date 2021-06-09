@@ -15,14 +15,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace GWinGet.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class LogViewerDialog : ContentDialog
     {
         public LogViewerDialog(string fileName)
@@ -36,7 +30,7 @@ namespace GWinGet.Views
 
         private void LoadLogContent(string logFileName)
         {
-            var logFilePath = Path.Combine(Services.LogService.LogPath, logFileName);
+            string logFilePath = Path.Combine(Services.LogService.LogPath, logFileName);
 
             LogContentBox.Document.SetText(Microsoft.UI.Text.TextSetOptions.ApplyRtfDocumentDefaults, File.ReadAllText(logFilePath));
 

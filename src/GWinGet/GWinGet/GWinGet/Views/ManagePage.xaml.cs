@@ -34,7 +34,7 @@ namespace GWinGet.Views
             {
                 AppEnv.installedAppManager = new Services.InstalledAppManager();
 
-                RefreshInstalledList();
+                _ =RefreshInstalledList();
             }
             else
             {
@@ -42,7 +42,7 @@ namespace GWinGet.Views
             }
         }
 
-        private async void RefreshInstalledList()
+        private async Task RefreshInstalledList()
         {
             StartBusy();
 
@@ -69,9 +69,9 @@ namespace GWinGet.Views
 
         private void FilterPackages()
         {
-            var queryString = PackageSearchBox.Text;
+            string queryString = PackageSearchBox.Text;
 
-            var resultList = !string.IsNullOrWhiteSpace(queryString) ?
+            List<Package> resultList = !string.IsNullOrWhiteSpace(queryString) ?
                 AppManager.InstalledPackages.FindAll(x => x.Name.Contains(queryString, StringComparison.OrdinalIgnoreCase)) :
                 AppManager.InstalledPackages;
 
@@ -87,14 +87,14 @@ namespace GWinGet.Views
             GC.Collect();
         }
 
-        private async void ShowUninstallDialog(Package package)
+        private async Task ShowUninstallDialog(Package package)
         {
-            var dialog = new UninstallDialog(package)
+            UninstallDialog dialog = new(package)
             {
                 XamlRoot = Content.XamlRoot
             };
 
-            dialog.Closed += delegate { RefreshInstalledList(); };
+            dialog.Closed += async delegate { await RefreshInstalledList(); };
 
             await dialog.ShowAsync();
         }
@@ -132,11 +132,11 @@ namespace GWinGet.Views
                 case "Uninstall":
                     if (PackageDataGrid.SelectedItems.Count > 0)
                     {
-                        ShowUninstallDialog(PackageDataGrid.SelectedItem as Package);
+                        _ = ShowUninstallDialog(PackageDataGrid.SelectedItem as Package);
                     }
                     break;
                 case "Refresh":
-                    RefreshInstalledList();
+                    _ = RefreshInstalledList();
                     break;
                 default:
                     break;

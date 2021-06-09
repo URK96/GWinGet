@@ -8,5 +8,28 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <NavigationView x:Name="SettingNavView" PaneDisplayMode="Top" IsBackButtonVisible="Collapsed" IsSettingsVisible="False"
+                    SelectionChanged="SettingNavView_SelectionChanged">
+
+        <NavigationView.MenuItems>
+
+            <NavigationViewItem Icon="Globe" Content="General" Tag="GeneralSettingPage" />
+            <NavigationViewItem Icon="Document" Content="Log" Tag="LogSettingPage" />
+
+        </NavigationView.MenuItems>
+
+        <NavigationView.Content>
+
+            <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                          VerticalScrollBarVisibility="Auto">
+
+                <Frame x:Name="SettingFrame" Margin="20, 20, 20, 0" 
+                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+            </ScrollViewer>
+
+        </NavigationView.Content>
+
+    </NavigationView>
     
 </Page>

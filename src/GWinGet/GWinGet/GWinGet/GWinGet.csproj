@@ -11,6 +11,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\github_icon.png" />
+    <None Remove="Assets\github_light_icon.png" />
     <None Remove="Resources\Images\appicon.png" />
     <None Remove="Views\ErrorPage.xaml" />
     <None Remove="Views\InfoPage.xaml" />
@@ -20,6 +22,8 @@
     <None Remove="Views\MainPage.xaml" />
     <None Remove="Views\ManagePage.xaml" />
     <None Remove="Views\SettingPage.xaml" />
+    <None Remove="Views\SettingViews\GeneralSettingPage.xaml" />
+    <None Remove="Views\SettingViews\LogSettingPage.xaml" />
     <None Remove="Views\UninstallDialog.xaml" />
   </ItemGroup>
 
@@ -32,6 +36,12 @@
     <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.5.7" />
     <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.5.7" />
     <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\SettingViews\LogSettingPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>
@@ -84,6 +94,12 @@
 
   <ItemGroup>
     <Page Update="Views\InstallPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\SettingViews\GeneralSettingPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

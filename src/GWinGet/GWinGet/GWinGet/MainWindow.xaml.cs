@@ -28,23 +28,23 @@ namespace GWinGet
             this.ExtendsContentIntoTitleBar = true;
             this.Title = "GWinGet";
 
-            //MainNavView.SelectedItem = MainNavView.MenuItems[0];
+            MainNavView.SelectedItem = MainNavView.MenuItems[0];
         }
 
         private void MainNavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             if (args.IsSettingsSelected)
             {
-                var item = args.SelectedItem as NavigationViewItem;
+                NavigationViewItem item = args.SelectedItem as NavigationViewItem;
                 sender.Header = item.Content;
 
                 MainFrame.Navigate(typeof(Views.SettingPage));
             }
             else
             {
-                var item = args.SelectedItem as NavigationViewItem;
-                var tag = item.Tag as string;
-                var page = Type.GetType($"GWinGet.Views.{tag}");
+                NavigationViewItem item = args.SelectedItem as NavigationViewItem;
+                string tag = item.Tag as string;
+                Type page = Type.GetType($"GWinGet.Views.{tag}");
                 object arg = null;
 
                 sender.Header = item.Content;

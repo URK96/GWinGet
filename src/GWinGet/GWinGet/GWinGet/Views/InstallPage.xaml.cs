@@ -39,7 +39,7 @@ namespace GWinGet.Views
             {
                 AppEnv.packageDBService = new Services.PackageDBService();
 
-                RefreshPackages();
+                _ = RefreshPackages();
             }
             else
             {
@@ -47,13 +47,13 @@ namespace GWinGet.Views
             }
         }
 
-        private async void RefreshPackages()
+        private async Task RefreshPackages()
         {
             StartBusy();
 
             BusyStatus.Text = "Update WinGet DB";
 
-            var psi = new ProcessStartInfo()
+            ProcessStartInfo psi = new()
             {
                 FileName = "winget",
                 Arguments = $"search",
@@ -64,7 +64,7 @@ namespace GWinGet.Views
             };
             psi.StandardOutputEncoding = Encoding.UTF8;
 
-            using var p = new Process()
+            using Process p = new()
             {
                 StartInfo = psi
             };
@@ -95,9 +95,9 @@ namespace GWinGet.Views
 
         private void FilterPackages()
         {
-            var queryString = PackageSearchBox.Text;
+            string queryString = PackageSearchBox.Text;
 
-            var resultList = !string.IsNullOrWhiteSpace(queryString) ?
+            List<Package> resultList = !string.IsNullOrWhiteSpace(queryString) ?
                 PackageDBService.AvailablePackages.FindAll(x => x.Name.Contains(queryString, StringComparison.OrdinalIgnoreCase)) :
                 PackageDBService.AvailablePackages;
 
@@ -113,9 +113,9 @@ namespace GWinGet.Views
             GC.Collect();
         }
 
-        private async void ShowInstallDialog(Package package)
+        private async Task ShowInstallDialog(Package package)
         {
-            var dialog = new InstallDialog(package)
+            InstallDialog dialog = new(package)
             {
                 XamlRoot = Content.XamlRoot
             };
@@ -156,11 +156,11 @@ namespace GWinGet.Views
                 case "Install":
                     if (PackageDataGrid.SelectedItems.Count > 0)
                     {
-                        ShowInstallDialog(PackageDataGrid.SelectedItem as Package);
+                        _ = ShowInstallDialog(PackageDataGrid.SelectedItem as Package);
                     }
                     break;
                 case "Refresh":
-                    RefreshPackages();
+                    _ = RefreshPackages();
                     break;
                 default:
                     break;

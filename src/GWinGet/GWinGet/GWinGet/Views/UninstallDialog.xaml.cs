@@ -39,7 +39,7 @@ namespace GWinGet.Views
 
         private void SetPackageInfo()
         {
-            var sb = new StringBuilder();
+            StringBuilder sb = new();
 
             sb.AppendLine($"Package Name : {package.Name}")
                 .AppendLine($"Package Publisher : {package.Publisher}")
@@ -49,15 +49,15 @@ namespace GWinGet.Views
             PackageInfoBlock.Text = sb.ToString();
         }
 
-        private async void UninstallProcess()
+        private async Task UninstallProcess()
         {
             StartBusy();
 
-            var uninstallDateTimeStr = $"{DateTime.Now:yyyyMMddHHmmss}";
+            string uninstallDateTimeStr = $"{DateTime.Now:yyyyMMddHHmmss}";
 
             logFileName = $"{package.Name}_Uninstall_Log_{uninstallDateTimeStr}.txt";
 
-            var psi = new ProcessStartInfo()
+            ProcessStartInfo psi = new()
             {
                 FileName = "winget",
                 Arguments = $"uninstall \"{package.Name}\"",
@@ -68,7 +68,7 @@ namespace GWinGet.Views
             };
             psi.StandardOutputEncoding = Encoding.UTF8;
 
-            using var p = new Process()
+            using Process p = new()
             {
                 StartInfo = psi
             };
@@ -87,13 +87,13 @@ namespace GWinGet.Views
             EndBusy();
         }
 
-        private async void OpenLogViewer()
+        private async Task OpenLogViewer()
         {
             Hide();
 
             await Task.Delay(500);
 
-            var logDialog = new LogViewerDialog(logFileName)
+            LogViewerDialog logDialog = new(logFileName)
             {
                 XamlRoot = this.XamlRoot
             };
@@ -133,10 +133,10 @@ namespace GWinGet.Views
             switch ((sender as Button).Tag as string)
             {
                 case "Uninstall":
-                    UninstallProcess();
+                    _ = UninstallProcess();
                     break;
                 case "ViewLog":
-                    OpenLogViewer();
+                    _ = OpenLogViewer();
                     break;
                 default:
                     Hide();

@@ -46,7 +46,7 @@ namespace GWinGet.Views
             {
                 StartBusy();
 
-                var psi = new ProcessStartInfo()
+                ProcessStartInfo psi = new()
                 {
                     FileName = "winget",
                     CreateNoWindow = true,
@@ -56,7 +56,7 @@ namespace GWinGet.Views
                 };
                 psi.StandardOutputEncoding = Encoding.UTF8;
 
-                using var p = new Process()
+                using Process p = new()
                 {
                     StartInfo = psi
                 };
@@ -111,10 +111,12 @@ namespace GWinGet.Views
                 if (AppEnv.isWingetInstalled == true)
                 {
                     WingetExistIcon.Visibility = Visibility.Visible;
+                    WingetNotExistIcon.Visibility = Visibility.Collapsed;
                     WingetCheckBlock.Text = "Winget is installed :)";
                 }
                 else
                 {
+                    WingetExistIcon.Visibility = Visibility.Collapsed;
                     WingetNotExistIcon.Visibility = Visibility.Visible;
                     WingetCheckBlock.Text = "Winget is not installed :(";
                 }

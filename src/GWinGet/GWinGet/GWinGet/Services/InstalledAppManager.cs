@@ -1,6 +1,4 @@
-﻿using GWinGet.Models;
-
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 
 using System;
 using System.Collections.Generic;
@@ -9,16 +7,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Windows.Management.Deployment;
+using Windows.ApplicationModel;
+
+using GPackage = GWinGet.Models.Package;
 
 namespace GWinGet.Services
 {
     public class InstalledAppManager
     {
-        public List<Package> InstalledPackages { get; private set; }
+        public List<GPackage> InstalledPackages { get; private set; }
 
         public InstalledAppManager()
         {
-            InstalledPackages = new List<Package>();
+            InstalledPackages = new List<GPackage>();
         }
 
         public void RefreshList()
@@ -31,15 +32,15 @@ namespace GWinGet.Services
 
         private void FindFromPackageManager()
         {
-            var pManager = new PackageManager();
-            var pList = pManager.FindPackagesForUserWithPackageTypes("", PackageTypes.Main).ToList();
+            PackageManager pManager = new();
+            List<Package> pList = pManager.FindPackagesForUserWithPackageTypes("", PackageTypes.Main).ToList();
 
-            foreach (var packageInfo in pList)
+            foreach (Package packageInfo in pList)
             {
-                var packageId = packageInfo.Id;
-                var packageVersion = $"{packageId.Version.Major}.{packageId.Version.Minor}.{packageId.Version.Revision}.{packageId.Version.Build}";
+                PackageId packageId = packageInfo.Id;
+                string packageVersion = $"{packageId.Version.Major}.{packageId.Version.Minor}.{packageId.Version.Revision}.{packageId.Version.Build}";
 
-                var package = new Package
+                GPackage package = new()
                 {
                     Name = packageInfo.DisplayName,
                     PackageId = packageId.Name,
@@ -56,8 +57,8 @@ namespace GWinGet.Services
         {
             const string uninstallKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
 
-            using var localMachineKey = Registry.LocalMachine.OpenSubKey(uninstallKey);
-            using var currentUserKey = Registry.CurrentUser.OpenSubKey(uninstallKey);
+            using RegistryKey localMachineKey = Registry.LocalMachine.OpenSubKey(uninstallKey);
+            using RegistryKey currentUserKey = Registry.CurrentUser.OpenSubKey(uninstallKey);
 
             AddFromRegSubKey(localMachineKey);
             AddFromRegSubKey(currentUserKey);
@@ -65,21 +66,21 @@ namespace GWinGet.Services
         
         private void AddFromRegSubKey(RegistryKey key)
         {
-            foreach (var subKeyName in key.GetSubKeyNames())
+            foreach (string subKeyName in key.GetSubKeyNames())
             {
-                using var subKey = key.OpenSubKey(subKeyName);
+                using RegistryKey subKey = key.OpenSubKey(subKeyName);
 
-                var displayName = subKey.GetValue("DisplayName");
-                var displayVersion = subKey.GetValue("DisplayVersion");
-                var publisher = subKey.GetValue("Publisher");
-                var packageId = subKeyName;
+                object displayName = subKey.GetValue("DisplayName");
+                object displayVersion = subKey.GetValue("DisplayVersion");
+                object publisher = subKey.GetValue("Publisher");
+                object packageId = subKeyName;
 
                 if (displayName == null)
                 {
                     continue;
                 }
 
-                var package = new Package
+                GPackage package = new()
                 {
                     Name = displayName as string,
                     Publisher = (publisher == null) ? string.Empty : publisher as string,

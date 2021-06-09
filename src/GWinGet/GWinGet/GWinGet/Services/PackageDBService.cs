@@ -32,28 +32,28 @@ namespace GWinGet.Services
 
         public void RefreshList()
         {
-            var dbPath = GetNewestDBPath();
-            var connectionStr = @$"Data Source={dbPath}";
+            string dbPath = GetNewestDBPath();
+            string connectionStr = @$"Data Source={dbPath}";
             var connectionOption = new DbContextOptionsBuilder<PackageDB>()
                 .UseSqlite(connectionStr)
                 .Options;
 
-            using var context = new PackageDB(connectionOption);
+            using PackageDB context = new(connectionOption);
 
             AvailablePackages.Clear();
 
             try
             {
-                foreach (var item in context.Manifests)
+                foreach (Manifest item in context.Manifests)
                 {
-                    var packageId = context.Ids.Find((int)item.Id).Id;
-                    var index = AvailablePackages.FindIndex(x => x.PackageId.Equals(packageId));
+                    string packageId = context.Ids.Find((int)item.Id).Id;
+                    int index = AvailablePackages.FindIndex(x => x.PackageId.Equals(packageId));
 
-                    var refVersion = context.Versions.Find((int)item.VersionId).Version;
+                    string refVersion = context.Versions.Find((int)item.VersionId).Version;
 
                     if (index < 0)
                     {
-                        var newPackage = new Package
+                        Package newPackage = new()
                         {
                             Name = context.Names.Find((int)item.NameId).Name,
                             PackageId = context.Ids.Find((int)item.Id).Id,
@@ -69,7 +69,7 @@ namespace GWinGet.Services
                     }
                     else
                     {
-                        var package = AvailablePackages[index];
+                        Package package = AvailablePackages[index];
 
                         package.versions.Add(refVersion);
 
@@ -89,12 +89,12 @@ namespace GWinGet.Services
 
         private string GetNewestDBPath()
         {
-            var dirs = Directory.GetDirectories(APPDATA_PATH, "Microsoft.Winget.Source_*");
+            string[] dirs = Directory.GetDirectories(APPDATA_PATH, "Microsoft.Winget.Source_*");
 
             Array.Sort(dirs);
 
-            var newestDirPath = dirs.Last();
-            var dbPath = Path.Combine(newestDirPath, "Public", "index.db");
+            string newestDirPath = dirs.Last();
+            string dbPath = Path.Combine(newestDirPath, "Public", "index.db");
 
             return dbPath;
         }
