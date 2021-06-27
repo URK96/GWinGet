@@ -9,9 +9,9 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        
+
         <ScrollViewer>
-            
+
             <StackPanel Margin="10, 10, 10, 10" Orientation="Vertical"
                         HorizontalAlignment="Center" VerticalAlignment="Stretch">
 
@@ -40,9 +40,9 @@
                 </HyperlinkButton>
 
             </StackPanel>
-            
+
         </ScrollViewer>
-        
+
     </Grid>
     
 </Page>

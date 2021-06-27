@@ -17,8 +17,14 @@ using Windows.Foundation.Collections;
 
 using AppEnv = GWinGet.AppEnvironment;
 
+// To learn more about WinUI, the WinUI project structure,
+// and more about our project templates, see: http://aka.ms/winui-project-info.
+
 namespace GWinGet
 {
+    /// <summary>
+    /// An empty window that can be used on its own or navigated to within a Frame.
+    /// </summary>
     public sealed partial class MainWindow : Window
     {
         public MainWindow()
@@ -33,21 +39,19 @@ namespace GWinGet
 
         private void MainNavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
+            NavigationViewItem item = args.SelectedItem as NavigationViewItem;
+
+            sender.Header = item.Content;
+
             if (args.IsSettingsSelected)
             {
-                NavigationViewItem item = args.SelectedItem as NavigationViewItem;
-                sender.Header = item.Content;
-
                 MainFrame.Navigate(typeof(Views.SettingPage));
             }
             else
             {
-                NavigationViewItem item = args.SelectedItem as NavigationViewItem;
                 string tag = item.Tag as string;
                 Type page = Type.GetType($"GWinGet.Views.{tag}");
                 object arg = null;
-
-                sender.Header = item.Content;
 
                 if ((AppEnv.isWingetInstalled != true) &&
                     (tag.Equals("InstallPage") || tag.Equals("ManagePage")))

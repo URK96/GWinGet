@@ -63,7 +63,7 @@ namespace GWinGet.Services
             AddFromRegSubKey(localMachineKey);
             AddFromRegSubKey(currentUserKey);
         }
-        
+
         private void AddFromRegSubKey(RegistryKey key)
         {
             foreach (string subKeyName in key.GetSubKeyNames())

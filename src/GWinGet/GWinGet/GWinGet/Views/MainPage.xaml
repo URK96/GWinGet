@@ -24,7 +24,7 @@
                 </RichTextBlock>
 
                 <StackPanel Orientation="Horizontal" Margin="0, 30, 0, 0" HorizontalAlignment="Center">
-                    
+
                     <SymbolIcon x:Name="WingetExistIcon" Symbol="Accept" Foreground="Green" />
                     <SymbolIcon x:Name="WingetNotExistIcon" Symbol="Cancel" Foreground="Red" />
                     <ProgressRing x:Name="WingetCheckRing" Margin="10, 0, 10, 0" Width="20" IsActive="False" />
@@ -33,8 +33,9 @@
                 </StackPanel>
 
             </StackPanel>
-            
+
         </ScrollViewer>
-        
+
     </Grid>
+    
 </Page>

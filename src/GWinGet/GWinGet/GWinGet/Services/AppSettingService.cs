@@ -13,7 +13,7 @@ namespace GWinGet.Services
         public static ApplicationDataContainer LocalSettingContainer => ApplicationData.Current.LocalSettings;
 
         public static void Save<T>(string key, T value) => LocalSettingContainer.Values.Add(key, value);
-        
+
         public static T Load<T>(string key, T defaultValue)
         {
             try

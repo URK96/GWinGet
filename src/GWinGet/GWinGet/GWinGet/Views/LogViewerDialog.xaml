@@ -27,5 +27,5 @@
         <RichEditBox x:Name="LogContentBox" Grid.Row="1" />
 
     </Grid>
-
+    
 </ContentDialog>

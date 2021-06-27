@@ -18,11 +18,11 @@
         <TextBlock x:Name="PackageInfoBlock" Margin="0, 10, 0, 0" />
 
         <StackPanel x:Name="BusyPanel" Orientation="Horizontal" Visibility="Collapsed">
-            
+
             <ProgressRing x:Name="BusyRing" Width="20" Height="20"
                           IsActive="False" />
             <TextBlock x:Name="BusyStatus" Margin="10, 0, 0, 0" />
-            
+
         </StackPanel>
 
         <TextBlock x:Name="InstallStatus" Margin="0, 10, 0, 10"
@@ -38,7 +38,7 @@
                     Click="Button_Click" />
 
         </StackPanel>
-        
+
     </StackPanel>
     
 </ContentDialog>
