@@ -10,7 +10,5 @@ namespace GWinGet
     {
         // General Setting Keys
         public const string APP_DARKTHEME = "App_DarkTheme";
-
-
     }
 }

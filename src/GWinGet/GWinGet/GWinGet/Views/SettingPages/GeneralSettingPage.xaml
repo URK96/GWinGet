@@ -1,0 +1,30 @@
+﻿<Page
+    x:Class="GWinGet.Views.SettingPages.GeneralSettingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GWinGet.Views.SettingPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10, 20, 10, 0">
+
+        <StackPanel Orientation="Vertical">
+
+            <TextBlock Margin="0, 0, 0, 10" Text="Theme" FontSize="20" />
+
+            <ComboBox x:Name="ThemeSwitchComboBox" 
+                      SelectionChanged="ThemeSwitchComboBox_SelectionChanged">
+                <x:String>System</x:String>
+                <x:String>Light</x:String>
+                <x:String>Dark</x:String>
+            </ComboBox>
+            <TextBlock x:Name="ThemeSwitchCaution"
+                       Text="Restart app to apply theme setting" Foreground="OrangeRed" />
+
+        </StackPanel>
+
+    </Grid>
+    
+</Page>

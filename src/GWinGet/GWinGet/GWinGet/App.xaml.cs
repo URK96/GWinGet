@@ -1,4 +1,6 @@
-﻿using Microsoft.UI.Xaml;
+﻿using GWinGet.Services;
+
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -17,6 +19,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -28,6 +31,40 @@ namespace GWinGet
     /// </summary>
     public partial class App : Application
     {
+#if !UNIVERSAL
+        private static Window currentWindow;
+#endif
+        public static Window CurrentWindow
+        {
+            get
+            {
+#if !UNIVERSAL
+                return currentWindow;
+#else
+                return Window.Current;
+#endif
+            }
+        }
+
+        public static ElementTheme RootTheme
+        {
+            get
+            {
+                if (CurrentWindow.Content is FrameworkElement rootElement)
+                {
+                    return rootElement.RequestedTheme;
+                }
+
+                return ElementTheme.Default;
+            }
+            set
+            {
+                if (CurrentWindow.Content is FrameworkElement rootElement)
+                {
+                    rootElement.RequestedTheme = value;
+                }
+            }
+        }
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -46,6 +83,10 @@ namespace GWinGet
         {
             m_window = new MainWindow();
             m_window.Activate();
+
+            currentWindow = m_window;
+
+            //RootTheme = (ElementTheme)AppSettingService.Load(AppSettingKey.APP_DARKTHEME, (int)ElementTheme.Default);
         }
 
         private Window m_window;

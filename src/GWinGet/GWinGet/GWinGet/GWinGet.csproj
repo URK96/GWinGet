@@ -25,6 +25,8 @@
     <None Remove="Views\MainPage.xaml" />
     <None Remove="Views\ManagePage.xaml" />
     <None Remove="Views\SettingPage.xaml" />
+    <None Remove="Views\SettingPages\GeneralSettingPage.xaml" />
+    <None Remove="Views\SettingPages\LogSettingPage.xaml" />
     <None Remove="Views\UninstallDialog.xaml" />
   </ItemGroup>
 
@@ -37,6 +39,12 @@
     <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.8.0" />
     <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.8.0" />
     <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\SettingPages\LogSettingPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>
@@ -89,6 +97,12 @@
 
   <ItemGroup>
     <Page Update="Views\ErrorPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\SettingPages\GeneralSettingPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
