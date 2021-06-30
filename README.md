@@ -29,7 +29,7 @@ Beta version will release on June
 
 ## How to Build
 
-1. Install WinUI 3 Project Reunion 0.5 Extension (with VS 2019 16.10 or newer) ([Reference](https://docs.microsoft.com/en-us/windows/apps/winui/winui3/))
+1. Install WinUI 3 Project Reunion 0.8 Extension (with VS 2019 16.10 or newer) ([Reference](https://docs.microsoft.com/en-us/windows/apps/winui/winui3/))
 2. Download zip or clone this reposity
 3. Open solution
 
