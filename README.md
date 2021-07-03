@@ -22,9 +22,11 @@
 
 ## Download & Install
 
-This application is developing now.
+You can get on Microsoft Store
 
-Beta version will release on June
+If you cannot find GWinGet on Microsoft Store, you can download and install GWinGet from [Github Release](https://github.com/URK96/GWinGet/releases)
+
+If you install from Github Release, you must extract .zip file and run install.ps1
 
 
 ## How to Build
