@@ -9,7 +9,21 @@ namespace GWinGet.Services
 {
     public static class LogService
     {
-        public static string LogPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "GWinGetLog");
+        private static string logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "GWinGetLog");
+
+        public static string LogPath
+        {
+            get
+            {
+                if (!Directory.Exists(logPath))
+                {
+                    Directory.CreateDirectory(logPath);
+                }
+
+                return logPath;
+            }
+        }
+        
 
         public static void WriteLog(string fileName, string message)
         {
