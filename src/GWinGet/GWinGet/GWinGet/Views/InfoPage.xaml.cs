@@ -64,6 +64,8 @@ namespace GWinGet.Views
 
             StartBusy();
 
+            await Task.Delay(1000);
+
             string[] serverVer = (await wc.DownloadStringTaskAsync("https://raw.githubusercontent.com/URK96/GWinGet/main/Version.txt")).Split('.');
             string[] appVer = AppVersionBlock.Text[1..].Split('.');
 
@@ -85,11 +87,11 @@ namespace GWinGet.Views
         {
             DispatcherQueue.TryEnqueue(() =>
             {
-                WingetHasUpdateIcon.Visibility = Visibility.Collapsed;
-                WingetUpToDateIcon.Visibility = Visibility.Collapsed;
-                WingetUpdateCheckRing.IsActive = true;
+                GWinGetHasUpdateIcon.Visibility = Visibility.Collapsed;
+                GWinGetUpToDateIcon.Visibility = Visibility.Collapsed;
+                GWinGetUpdateCheckRing.IsActive = true;
 
-                WingetUpdateCheckBlock.Text = "Checking GWinGet update...";
+                GWinGetUpdateCheckBlock.Text = "Checking GWinGet update...";
             });
         }
 
@@ -97,7 +99,8 @@ namespace GWinGet.Views
         {
             DispatcherQueue.TryEnqueue(() =>
             {
-                WingetUpdateCheckRing.IsActive = false;
+                GWinGetUpdateCheckRing.IsActive = false;
+                GWinGetUpdateCheckRing.Visibility = Visibility.Collapsed;
             });
         }
 
@@ -107,17 +110,23 @@ namespace GWinGet.Views
             {
                 if (hasUpdate)
                 {
-                    WingetHasUpdateIcon.Visibility = Visibility.Visible;
-                    WingetUpToDateIcon.Visibility = Visibility.Collapsed;
-                    WingetUpdateCheckBlock.Text = "GWinGet update is ready";
+                    GWinGetHasUpdateIcon.Visibility = Visibility.Visible;
+                    GWinGetUpToDateIcon.Visibility = Visibility.Collapsed;
+                    GWinGetUpdateCheckBlock.Text = "GWinGet update is ready";
+                    GWinGetUpdateButton.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    WingetHasUpdateIcon.Visibility = Visibility.Collapsed;
-                    WingetUpToDateIcon.Visibility = Visibility.Visible;
-                    WingetUpdateCheckBlock.Text = "GWinGet is up to date";
+                    GWinGetHasUpdateIcon.Visibility = Visibility.Collapsed;
+                    GWinGetUpToDateIcon.Visibility = Visibility.Visible;
+                    GWinGetUpdateCheckBlock.Text = "GWinGet is up to date";
                 }
             });
+        }
+
+        private void GWinGetUpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

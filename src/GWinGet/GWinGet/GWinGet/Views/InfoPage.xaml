@@ -29,12 +29,16 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0, 30, 0, 0" HorizontalAlignment="Center">
 
-                    <SymbolIcon x:Name="WingetHasUpdateIcon" Symbol="Download" Foreground="CadetBlue" />
-                    <SymbolIcon x:Name="WingetUpToDateIcon" Symbol="Accept" Foreground="Green" />
-                    <ProgressRing x:Name="WingetUpdateCheckRing" Margin="10, 0, 10, 0" Width="20" IsActive="False" />
-                    <TextBlock x:Name="WingetUpdateCheckBlock" />
+                    <SymbolIcon x:Name="GWinGetHasUpdateIcon" Symbol="Download" Foreground="CadetBlue" />
+                    <SymbolIcon x:Name="GWinGetUpToDateIcon" Symbol="Accept" Foreground="Green" />
+                    <ProgressRing x:Name="GWinGetUpdateCheckRing" Width="20" IsActive="False" />
+                    <TextBlock x:Name="GWinGetUpdateCheckBlock" Margin="10, 0, 0, 0" />
 
                 </StackPanel>
+
+                <Button x:Name="GWinGetUpdateButton" HorizontalAlignment="Center" Margin="0, 10, 0, 0" Visibility="Collapsed" 
+                        Content="Update"
+                        Click="GWinGetUpdateButton_Click"/>
 
                 <TextBlock Margin="0, 80, 0, 0"
                            HorizontalAlignment="Center"
