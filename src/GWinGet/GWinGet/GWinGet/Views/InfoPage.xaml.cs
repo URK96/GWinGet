@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
@@ -56,12 +57,27 @@ namespace GWinGet.Views
 
         private async Task CheckUpdate()
         {
+            using WebClient wc = new WebClient();
+
+            Package package = Package.Current;
+            PackageId packageId = package.Id;
+
             StartBusy();
 
+            string[] serverVer = (await wc.DownloadStringTaskAsync("https://raw.githubusercontent.com/URK96/GWinGet/main/Version.txt")).Split('.');
+            string[] appVer = AppVersionBlock.Text[1..].Split('.');
 
+            for (int i = 0; i < serverVer.Length; ++i)
+            {
+                if (int.Parse(serverVer[i]) > int.Parse(appVer[i]))
+                {
+                    hasUpdate = true;
+
+                    break;
+                }
+            }
 
             EndBusy();
-
             SetUpdateCheckStatus();
         }
 

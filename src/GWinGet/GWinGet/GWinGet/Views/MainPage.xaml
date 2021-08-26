@@ -27,7 +27,7 @@
 
                     <SymbolIcon x:Name="WingetExistIcon" Symbol="Accept" Foreground="Green" />
                     <SymbolIcon x:Name="WingetNotExistIcon" Symbol="Cancel" Foreground="Red" />
-                    <ProgressRing x:Name="WingetCheckRing" Margin="10, 0, 10, 0" Width="20" IsActive="False" />
+                    <ProgressRing x:Name="WingetCheckRing" Margin="10, 0, 0, 0" Width="20" IsActive="False" />
                     <TextBlock x:Name="WingetCheckBlock" />
 
                 </StackPanel>
