@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 
 using Windows.ApplicationModel;
 using Windows.Foundation;
@@ -28,11 +29,15 @@ namespace GWinGet.Views
     /// </summary>
     public sealed partial class InfoPage : Page
     {
+        private bool hasUpdate = false;
+
         public InfoPage()
         {
             this.InitializeComponent();
 
             SetInfo();
+
+            _ = CheckUpdate();
         }
 
         private void SetInfo()
@@ -47,6 +52,56 @@ namespace GWinGet.Views
                 "ms-appx:///Assets/github_light_icon.png";
 
             GithubIcon.Source = new BitmapImage(new Uri(githubIconURI));
+        }
+
+        private async Task CheckUpdate()
+        {
+            StartBusy();
+
+
+
+            EndBusy();
+
+            SetUpdateCheckStatus();
+        }
+
+        private void StartBusy()
+        {
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                WingetHasUpdateIcon.Visibility = Visibility.Collapsed;
+                WingetUpToDateIcon.Visibility = Visibility.Collapsed;
+                WingetUpdateCheckRing.IsActive = true;
+
+                WingetUpdateCheckBlock.Text = "Checking GWinGet update...";
+            });
+        }
+
+        private void EndBusy()
+        {
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                WingetUpdateCheckRing.IsActive = false;
+            });
+        }
+
+        private void SetUpdateCheckStatus()
+        {
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                if (hasUpdate)
+                {
+                    WingetHasUpdateIcon.Visibility = Visibility.Visible;
+                    WingetUpToDateIcon.Visibility = Visibility.Collapsed;
+                    WingetUpdateCheckBlock.Text = "GWinGet update is ready";
+                }
+                else
+                {
+                    WingetHasUpdateIcon.Visibility = Visibility.Collapsed;
+                    WingetUpToDateIcon.Visibility = Visibility.Visible;
+                    WingetUpdateCheckBlock.Text = "GWinGet is up to date";
+                }
+            });
         }
     }
 }
