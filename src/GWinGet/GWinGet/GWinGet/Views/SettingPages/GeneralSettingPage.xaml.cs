@@ -57,8 +57,6 @@ namespace GWinGet.Views.SettingPages
             App.RootTheme = theme;
             //ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
-            var view2 = 
-
             //if (theme == ElementTheme.Dark)
             //{
             //    titleBar.ButtonForegroundColor = Colors.White;
