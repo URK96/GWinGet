@@ -1,0 +1,32 @@
+<!--  Copyright (c) Microsoft Corporation and Contributors.  -->
+<!--  Licensed under the MIT License.  -->
+
+<Page x:Class="GWinGet.Views.SettingPages.GeneralSettingPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:GWinGet.Views.SettingPages"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+      mc:Ignorable="d">
+    <Grid Margin="10,20,10,0"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
+        <StackPanel Orientation="Vertical">
+            <TextBlock Margin="0,0,0,10"
+                       FontSize="20"
+                       Text="Theme" />
+
+            <ComboBox x:Name="ThemeSwitchComboBox"
+                      SelectionChanged="ThemeSwitchComboBox_SelectionChanged">
+                <x:String>System</x:String>
+                <x:String>Light</x:String>
+                <x:String>Dark</x:String>
+            </ComboBox>
+
+            <TextBlock x:Name="ThemeSwitchCaution"
+                       Foreground="OrangeRed"
+                       Text="Restart app to apply theme setting" />
+        </StackPanel>
+    </Grid>
+</Page>

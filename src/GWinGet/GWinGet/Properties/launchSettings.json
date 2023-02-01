@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "GWinGet (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "GWinGet (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

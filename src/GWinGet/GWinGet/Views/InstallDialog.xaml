@@ -1,0 +1,61 @@
+<!--  Copyright (c) Microsoft Corporation and Contributors.  -->
+<!--  Licensed under the MIT License.  -->
+
+<ContentDialog x:Class="GWinGet.Views.InstallDialog"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+               xmlns:local="using:GWinGet.Views"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+               Title="Download &amp; Install Package"
+               Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+               CornerRadius="4"
+               DefaultButton="None"
+               mc:Ignorable="d">
+
+    <StackPanel>
+        <TextBlock FontWeight="Bold"
+                   Text="Below package will install" />
+
+        <TextBlock x:Name="PackageInfoBlock"
+                   Margin="0,10,0,0" />
+
+        <StackPanel x:Name="BusyPanel"
+                    Orientation="Horizontal"
+                    Visibility="Collapsed">
+            <ProgressRing x:Name="BusyRing"
+                          Width="20"
+                          Height="20"
+                          IsActive="False" />
+
+            <TextBlock x:Name="BusyStatus"
+                       Margin="10,0,0,0" />
+        </StackPanel>
+
+        <TextBlock x:Name="InstallStatus"
+                   Margin="0,10,0,10"
+                   TextWrapping="Wrap" />
+
+        <StackPanel HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <Button x:Name="InstallButton"
+                    Margin="0,0,10,0"
+                    Background="SkyBlue"
+                    Click="Button_Click"
+                    Content="Install"
+                    Tag="Install" />
+
+            <Button x:Name="ViewLogButton"
+                    Margin="0,0,10,0"
+                    Background="LightGreen"
+                    Click="Button_Click"
+                    Content="View Log"
+                    IsEnabled="False"
+                    Tag="ViewLog" />
+
+            <Button x:Name="CloseButton"
+                    Click="Button_Click"
+                    Content="Close" />
+        </StackPanel>
+    </StackPanel>
+</ContentDialog>
